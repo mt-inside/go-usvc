@@ -15,6 +15,7 @@ import (
 )
 
 var (
+	// Global is a globally-scoped logger than can be used if you have no other choice
 	Global logr.Logger
 )
 
@@ -22,6 +23,7 @@ func init() {
 	Global = GetLogger(false).WithName("GLOBAL")
 }
 
+// GetLogger returns a zap-based zapr Logger, typed as a logr.Logger
 func GetLogger(devMode bool, options ...int) logr.Logger {
 	var zapCfg zap.Config
 	var devLevel, prodLevel zapcore.Level
@@ -63,7 +65,7 @@ func GetLogger(devMode bool, options ...int) logr.Logger {
 	/* == Intercept pkg log == */
 
 	golog.SetFlags(0) // don't add date and timestamps to the message, as the zapr writer will do that
-	golog.SetOutput(ZaprWriter{zr.WithValues("source", "go log")})
+	golog.SetOutput(zaprWriter{zr.WithValues("source", "go log")})
 
 	/* Intercept klog == */
 
@@ -78,9 +80,9 @@ func GetLogger(devMode bool, options ...int) logr.Logger {
 	return zr
 }
 
-type ZaprWriter struct{ log logr.Logger }
+type zaprWriter struct{ log logr.Logger }
 
-func (w ZaprWriter) Write(data []byte) (n int, err error) {
+func (w zaprWriter) Write(data []byte) (n int, err error) {
 	w.log.Info(string(data))
 	return len(data), nil
 }
