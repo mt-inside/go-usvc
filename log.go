@@ -1,0 +1,86 @@
+package logging
+
+import (
+	"fmt"
+	golog "log"
+	"os"
+	"time"
+
+	"github.com/go-logr/logr"
+	"github.com/go-logr/zapr"
+	"github.com/mattn/go-isatty"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"k8s.io/klog/v2"
+)
+
+var (
+	Global logr.Logger
+)
+
+func init() {
+	Global = GetLogger(false).WithName("GLOBAL")
+}
+
+func GetLogger(devMode bool, options ...int) logr.Logger {
+	var zapCfg zap.Config
+	var devLevel, prodLevel zapcore.Level
+	var err error
+
+	if len(options) == 0 {
+		devLevel = -10
+		prodLevel = zap.InfoLevel
+	} else {
+		devLevel = zapcore.Level(-1 * options[0])
+		prodLevel = zapcore.Level(-1 * options[0])
+		if devLevel > 0 {
+			panic(fmt.Errorf("Logging level must be +ve"))
+		}
+	}
+
+	if isatty.IsTerminal(os.Stdout.Fd()) || devMode {
+		zapCfg = zap.NewDevelopmentConfig()
+		zapCfg.EncoderConfig.EncodeCaller = nil
+		zapCfg.EncoderConfig.EncodeTime = func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+			enc.AppendString(t.Format("15:04:05"))
+		}
+		zapCfg.Level.SetLevel(devLevel)
+	} else {
+		zapCfg = zap.NewProductionConfig()
+		zapCfg.Level.SetLevel(prodLevel)
+	}
+	zapLog, err := zapCfg.Build()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	zr := zapr.NewLogger(zapLog)
+
+	if devMode {
+		zr.Info("Logging in dev mode; remove --dev flag for structured json output")
+	}
+
+	/* == Intercept pkg log == */
+
+	golog.SetFlags(0) // don't add date and timestamps to the message, as the zapr writer will do that
+	golog.SetOutput(ZaprWriter{zr.WithValues("source", "go log")})
+
+	/* Intercept klog == */
+
+	/* k8s stuff uses klog which is both an interface (with text and
+	* structured methods) and an impl (which prints only as text, not
+	* json). Can rewire its impl to something that outputs json (this is
+	* typed as a logr, so eg zapr), which makes all log-lines
+	* machine-parsable. However most of the k8s stuff doesn't use the
+	* structured part of the interface, so you just get msg="blob". */
+	klog.SetLogger(zr)
+
+	return zr
+}
+
+type ZaprWriter struct{ log logr.Logger }
+
+func (w ZaprWriter) Write(data []byte) (n int, err error) {
+	w.log.Info(string(data))
+	return len(data), nil
+}
