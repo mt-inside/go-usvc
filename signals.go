@@ -27,7 +27,7 @@ func InstallSignalHandlers(log logr.Logger) <-chan struct{} {
 }
 
 // ChannelWrapper runs an error-returning func on a background goroutine.
-// If the func returns an error, that is send down the channel that's returned.
+// If the func returns an error, that is sent down the channel that's returned.
 func ChannelWrapper(fn func() error) <-chan error {
 	ch := make(chan error)
 	go func() {
