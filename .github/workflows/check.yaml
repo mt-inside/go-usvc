@@ -13,9 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
-
       - name: Set up golang
         uses: actions/setup-go@v2
         with:
