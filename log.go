@@ -17,6 +17,8 @@ import (
 var (
 	// Global is a globally-scoped logger than can be used if you have no other choice
 	Global logr.Logger
+
+	zapCfg zap.Config
 )
 
 func init() {
@@ -25,7 +27,6 @@ func init() {
 
 // GetLogger returns a zap-based zapr Logger, typed as a logr.Logger
 func GetLogger(devMode bool, options ...int) logr.Logger {
-	var zapCfg zap.Config
 	var devLevel, prodLevel zapcore.Level
 	var err error
 
@@ -78,6 +79,11 @@ func GetLogger(devMode bool, options ...int) logr.Logger {
 	klog.SetLogger(zr)
 
 	return zr
+}
+
+// SetLevel sets the level of the entire tree of loggers returned from GetLogger
+func SetLevel(l int) {
+	zapCfg.Level.SetLevel(zapcore.Level(-1 * l))
 }
 
 type zaprWriter struct{ log logr.Logger }
