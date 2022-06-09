@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/go-logr/logr"
 	"github.com/go-logr/zapr"
 	"github.com/mattn/go-isatty"
@@ -22,6 +23,9 @@ var (
 )
 
 func init() {
+	spew.Config.DisableMethods = true
+	spew.Config.DisablePointerMethods = true
+
 	Global = GetLogger(false).WithName("GLOBAL")
 }
 
