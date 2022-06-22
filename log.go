@@ -41,7 +41,7 @@ func GetLogger(devMode bool, options ...int) logr.Logger {
 		devLevel = zapcore.Level(-1 * options[0])
 		prodLevel = zapcore.Level(-1 * options[0])
 		if devLevel > 0 {
-			panic(fmt.Errorf("Logging level must be +ve"))
+			panic(fmt.Errorf("logging level must be +ve"))
 		}
 	}
 
