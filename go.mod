@@ -8,12 +8,13 @@ require (
 	github.com/go-logr/zapr v0.4.0
 	github.com/mattn/go-isatty v0.0.12
 	go.uber.org/zap v1.17.0
+	golang.org/x/exp v0.0.0-20220613132600-b0d781184e0d
 	k8s.io/klog/v2 v2.5.0
 )
 
 require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
-	golang.org/x/sys v0.0.0-20210510120138-977fb7262007 // indirect
+	golang.org/x/sys v0.0.0-20211019181941-9d821ace8654 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
