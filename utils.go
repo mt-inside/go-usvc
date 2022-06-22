@@ -2,17 +2,16 @@ package usvc
 
 import "golang.org/x/exp/constraints"
 
-type Number interface {
-	constraints.Integer | constraints.Float
-}
-
-func Min(x, y int) int {
+// MinInt returns the minimum value of two ints. Use math.Min for floats
+func MinInt[T constraints.Integer](x, y T) T {
 	if x < y {
 		return x
 	}
 	return y
 }
-func Max(x, y int) int {
+
+// MaxInt returns the minimum value of two ints. Use math.Max for floats
+func MaxInt[T constraints.Integer](x, y T) T {
 	if x > y {
 		return x
 	}

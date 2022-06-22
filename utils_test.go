@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestMin(t *testing.T) {
+func TestMinInt(t *testing.T) {
 	cases := []struct {
 		x        int
 		y        int
@@ -21,13 +21,13 @@ func TestMin(t *testing.T) {
 	}
 
 	for _, cse := range cases {
-		got := Min(cse.x, cse.y)
+		got := MinInt(cse.x, cse.y)
 		if got != cse.expected {
-			t.Errorf("Min(%d, %d): got %d, expected %d.", cse.x, cse.y, got, cse.expected)
+			t.Errorf("MinInt(%d, %d): got %d, expected %d.", cse.x, cse.y, got, cse.expected)
 		}
 	}
 }
-func TestMax(t *testing.T) {
+func TestMaxInt(t *testing.T) {
 	cases := []struct {
 		x        int
 		y        int
@@ -44,9 +44,9 @@ func TestMax(t *testing.T) {
 	}
 
 	for _, cse := range cases {
-		got := Max(cse.x, cse.y)
+		got := MaxInt(cse.x, cse.y)
 		if got != cse.expected {
-			t.Errorf("Max(%d, %d): got %d, expected %d.", cse.x, cse.y, got, cse.expected)
+			t.Errorf("MaxInt(%d, %d): got %d, expected %d.", cse.x, cse.y, got, cse.expected)
 		}
 	}
 }
