@@ -48,6 +48,7 @@ func GetLogger(devMode bool, options ...int) logr.Logger {
 	if isatty.IsTerminal(os.Stdout.Fd()) || devMode {
 		zapCfg = zap.NewDevelopmentConfig()
 		zapCfg.EncoderConfig.EncodeCaller = nil
+		zapCfg.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 		zapCfg.EncoderConfig.EncodeTime = func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 			enc.AppendString(t.Format("15:04:05"))
 		}
