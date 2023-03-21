@@ -2,6 +2,7 @@ package usvc
 
 import (
 	"fmt"
+	"io/ioutil"
 	golog "log"
 	"os"
 	"time"
@@ -70,8 +71,7 @@ func GetLogger(devMode bool, options ...int) logr.Logger {
 
 	/* == Intercept pkg log == */
 
-	golog.SetFlags(0) // don't add date and timestamps to the message, as the zapr writer will do that
-	golog.SetOutput(zaprWriter{zr.WithValues("source", "go log")})
+	InterceptGoLog(zr)
 
 	/* Intercept klog == */
 
@@ -84,6 +84,15 @@ func GetLogger(devMode bool, options ...int) logr.Logger {
 	klog.SetLogger(zr)
 
 	return zr
+}
+
+func InterceptGoLog(l logr.Logger) {
+	golog.SetFlags(0) // don't add date and timestamps to the message, as the zapr writer will do that
+	golog.SetOutput(zaprWriter{l.WithValues("source", "go log")})
+}
+
+func DisableGoLog() {
+	golog.SetOutput(ioutil.Discard)
 }
 
 // SetLevel sets the level of the entire tree of loggers returned from GetLogger
