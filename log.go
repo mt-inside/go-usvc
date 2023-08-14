@@ -2,7 +2,7 @@ package usvc
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	golog "log"
 	"os"
 	"time"
@@ -92,7 +92,7 @@ func InterceptGoLog(l logr.Logger) {
 }
 
 func DisableGoLog() {
-	golog.SetOutput(ioutil.Discard)
+	golog.SetOutput(io.Discard)
 }
 
 // SetLevel sets the level of the entire tree of loggers returned from GetLogger

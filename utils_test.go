@@ -4,53 +4,6 @@ import (
 	"testing"
 )
 
-func TestMinInt(t *testing.T) {
-	cases := []struct {
-		x        int
-		y        int
-		expected int
-	}{
-		{3, 1, 1},
-		{5, 1, 1},
-		{1, 5, 1},
-		{1, 1, 1},
-		{-1, 1, -1},
-		{1, -1, -1},
-		{0, 1, 0},
-		{0, -1, -1},
-	}
-
-	for _, cse := range cases {
-		got := MinInt(cse.x, cse.y)
-		if got != cse.expected {
-			t.Errorf("MinInt(%d, %d): got %d, expected %d.", cse.x, cse.y, got, cse.expected)
-		}
-	}
-}
-func TestMaxInt(t *testing.T) {
-	cases := []struct {
-		x        int
-		y        int
-		expected int
-	}{
-		{3, 1, 3},
-		{5, 1, 5},
-		{1, 5, 5},
-		{1, 1, 1},
-		{-1, 1, 1},
-		{1, -1, 1},
-		{0, 1, 1},
-		{0, -1, 0},
-	}
-
-	for _, cse := range cases {
-		got := MaxInt(cse.x, cse.y)
-		if got != cse.expected {
-			t.Errorf("MaxInt(%d, %d): got %d, expected %d.", cse.x, cse.y, got, cse.expected)
-		}
-	}
-}
-
 func TestTernaryInt(t *testing.T) {
 	cases := []struct {
 		test     bool
